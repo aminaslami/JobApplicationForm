@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Job Application Form</title>
+  <style>
+    /* CSS Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+  </style>
+  <script>
+    // JavaScript Code for Form Validation
+    function validateForm() {
+      const form = document.getElementById('applicationForm');
+      const errorContainer = document.getElementById('errorContainer');
+      errorContainer.innerHTML = '';
+
+      let isValid = true;
+
+      // Validate required fields
+      const requiredFields = ['firstName', 'lastName', 'email', 'phoneNumber', 'resume', 'coverLetter'];
+      requiredFields.forEach(field => {
+        const input = form.elements[field];
+        if (input.value.trim() === '') {
+          displayErrorMessage(input, `${getFieldName(field)} is required`);
+          isValid = false;
+        } else {
+          hideErrorMessage(input);
+        }
+      });
+
+      // Validate email format
+      const emailInput = form.elements['email'];
+      if (!isValidEmail(emailInput.value.trim())) {
+        displayErrorMessage(emailInput, 'Invalid email format');
+        isValid = false;
+      } else {
+        hideErrorMessage(emailInput);
+      }
+
+      // Validate phone number format
+      const phoneInput = form.elements['phoneNumber'];
+      if (!isValidPhoneNumber(phoneInput.value.trim())) {
+        displayErrorMessage(phoneInput, 'Invalid phone number format');
+        isValid = false;
+      } else {
+        hideErrorMessage(phoneInput);
+      }
+
+      return isValid;
+    }
+
+    function getFieldName(field) {
+      return field.charAt(0).toUpperCase() + field.slice(1);
+    }
+
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function isValidPhoneNumber(phoneNumber) {
+      const phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(phoneNumber);
+    }
+
+    function displayErrorMessage(input, message) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error';
+      errorDiv.textContent = message;
+      input.classList.add('error-field');
+      input.parentNode.insertBefore(errorDiv, input.nextSibling);
+    }
+
+    function hideErrorMessage(input) {
+      const errorDiv = input.nextSibling;
+      if (errorDiv && errorDiv.classList.contains('error')) {
+        input.parentNode.removeChild(errorDiv);
+        input.classList.remove('error-field');
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Job Application Form</h1>
+
+    <form id="applicationForm" onsubmit="return validateForm()">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" required>
+
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="phoneNumber">Phone Number:</label>
+      <input type="text" id="phoneNumber" name="phoneNumber" required>
+
+      <label for="resume">Resume:</label>
+      <textarea id="resume" name="resume" rows="4" required></textarea>
+
+      <label for="coverLetter">Cover Letter:</label>
+      <textarea id="coverLetter" name="coverLetter" rows="4" required></textarea>
+
+      <div id="errorContainer"></div>
+
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+</body>
+</html>
